@@ -7,13 +7,14 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { auth, db } from "@/lib/firebase"; // Import Firestore (db)
+import { auth, db } from "@/lib/firebase"; // Firebase Auth & Firestore
 import {
   User,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile, // ✅ Import updateProfile
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; // Firestore functions
 
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  // ✅ Sign Up with Email, Name and Password
+  // ✅ Sign Up with Email, Name, and Password
   const signUpWithEmail = async (
     name: string,
     email: string,
@@ -60,15 +61,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
       const user = userCredential.user;
 
-      // Save user data (including name) to Firestore
+      // ✅ Update Firebase User Profile
+      await updateProfile(user, { displayName: name });
+
+      // ✅ Save user data (including name) to Firestore
       await setDoc(doc(db, "users", user.uid), {
-        name, // Store user's name
+        name, // ✅ Corrected: Use function argument instead of user.displayName
         email: user.email,
         createdAt: new Date().toISOString(),
         uid: user.uid,
       });
+
+      setUser({ ...user, displayName: name }); // ✅ Ensure UI updates with name
     } catch (error: unknown) {
-      console.error("Sign-Up Error:", error);
+      console.error("Sign-Up Error:", (error as Error).message || error);
       throw error;
     } finally {
       setLoading(false);
@@ -81,8 +87,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error: unknown) {
-      console.error("Sign-In Error:", error);
-      throw error; // Re-throw the error to handle it in the UI
+      console.error("Sign-In Error:", (error as Error).message || error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -94,7 +100,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await signOut(auth);
     } catch (error: unknown) {
-      console.error("Logout Error:", error);
+      console.error("Logout Error:", (error as Error).message || error);
     } finally {
       setLoading(false);
     }

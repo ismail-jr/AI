@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.sidebar {
+  background-color: #112267;
+  color: #f7f7f7;
+}
+.chat-page-bg {
+  background: #40466d;
+  color: #f7f7f7;
+}

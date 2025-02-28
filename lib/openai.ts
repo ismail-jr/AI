@@ -9,7 +9,13 @@ export const sendMessageToAI = async (message: string) => {
       BASE_URL,
       {
         model: "openai/gpt-3.5-turbo-0125", // Latest OpenAI model via OpenRouter
-        messages: [{ role: "user", content: message }],
+        messages: [
+          {
+            role: "system",
+            content: `You are an AI-powered career guidance assistant. Your job is to provide students with career advice, job market insights, resume-building tips, and interview preparation. Structure your responses clearly, provide relevant industry insights, and suggest appropriate courses or training programs. When answering, consider the user's career interests and skill level.`,
+          },
+          { role: "user", content: message },
+        ],
         max_tokens: 500,
       },
       {

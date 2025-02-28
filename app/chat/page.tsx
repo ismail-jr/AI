@@ -33,31 +33,12 @@ const ChatPage = () => {
 
   return (
     <>
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex h-screen chat-page-bg">
         <Sidebar />
         {/* Main Chat Area */}
         <div className="flex-1 flex flex-col">
           {/* Chat Header */}
-          <header className="bg-white p-4 border-b border-gray-200 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Bot size={24} className="text-blue-500" />{" "}
-              {/* AI Chatbot Icon */}
-              <h1 className="text-xl font-bold text-gray-800">AI Chat</h1>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-gray-600">
-                <User size={20} /> {/* User Icon */}
-                <span>{user?.email}</span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 text-white flex items-center py-2 px-4 rounded-md hover:bg-red-700 transition duration-300"
-              >
-                <LogOut size={18} className="mr-2" /> Logout
-              </button>
-            </div>
-          </header>
+          {/*  */}
 
           {/* Chat Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -67,7 +48,7 @@ const ChatPage = () => {
           </div>
 
           {/* Chat Input */}
-          <div className="bg-white p-4 border-t border-gray-200">
+          <div className="chat-page-bg">
             <ChatInput />
           </div>
         </div>
