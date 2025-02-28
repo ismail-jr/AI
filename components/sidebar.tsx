@@ -10,11 +10,15 @@ import {
   Settings,
   PlusCircle,
   MessageSquare,
+  MoreVertical,
+  Trash2,
 } from "lucide-react";
+import { useState } from "react";
 
 const Sidebar = () => {
   const { user, logout } = useAuth(); // ✅ Get user & logout function
-  const { pastQueries, startNewChat, setActiveChat } = useChat(); // ✅ Fetch past queries & new chat function
+  const { pastQueries, startNewChat, setActiveChat, deleteQuery } = useChat(); // ✅ Include delete function
+  const [menuOpen, setMenuOpen] = useState<string | null>(null); // 🔹 Track which menu is open
 
   return (
     <aside className="w-72 sidebar h-screen flex flex-col shadow-2xl bg-gray-900 text-white">
@@ -53,16 +57,51 @@ const Sidebar = () => {
           <h3 className="text-sm text-gray-400 mt-4 mb-2">Past Prompts</h3>
           <ul className="space-y-2 overflow-y-auto max-h-52">
             {pastQueries.length > 0 ? (
-              pastQueries.map((query, index) => (
+              pastQueries.map((query) => (
                 <li
-                  key={index}
-                  onClick={() => setActiveChat(query)} // ✅ Load past query into chat
-                  className="flex items-center space-x-2 p-2 bg-gray-800 rounded-md text-sm cursor-pointer hover:bg-gray-700 transition"
+                  key={query.id}
+                  className="flex justify-between items-center p-2 bg-gray-800 rounded-md text-sm cursor-pointer hover:bg-gray-700 transition relative"
                 >
-                  <MessageSquare size={16} className="text-blue-400" />
-                  <span className="truncate max-w-[180px]">
-                    {query.content}
-                  </span>
+                  {/* 🔹 Click to load chat */}
+                  <div
+                    onClick={() => setActiveChat(query)}
+                    className="flex items-center space-x-2 flex-1"
+                  >
+                    <MessageSquare size={16} className="text-blue-400" />
+                    <span className="truncate max-w-[150px]">
+                      {query.content}
+                    </span>
+                  </div>
+
+                  {/* 🔹 Three-dot menu */}
+                  <div className="relative">
+                    <button
+                      onClick={() =>
+                        setMenuOpen(
+                          menuOpen === query.id ? null : query.id || null
+                        )
+                      }
+                      className="p-1 rounded-full hover:bg-gray-700"
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+
+                    {/* 🔹 Dropdown menu */}
+                    {menuOpen === query.id && (
+                      <div className="absolute right-0 mt-2 w-28 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-10">
+                        <button
+                          onClick={() => {
+                            deleteQuery(query.id!);
+                            setMenuOpen(null);
+                          }}
+                          className="flex items-center space-x-2 w-full text-left p-2 hover:bg-gray-700 transition"
+                        >
+                          <Trash2 size={16} />
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </li>
               ))
             ) : (
@@ -83,7 +122,7 @@ const Sidebar = () => {
         </Link>
         <button
           onClick={logout}
-          className="w-full flex items-center justify-center space-x-2 bg-red-600 py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 mt-2"
+          className="w-full flex items-center justify-center space-x-2 bg-gray-600 py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 mt-2"
         >
           <LogOut size={18} />
           <span>Logout</span>

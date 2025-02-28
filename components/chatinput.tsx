@@ -81,6 +81,9 @@ const ChatInput = () => {
           <ArrowUp size={22} />
         </button>
       </form>
+      <p className="text-center pt-2 text-gray-300">
+        Guido can make mistakes. Check important info.
+      </p>
     </div>
   );
 };
