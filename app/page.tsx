@@ -8,6 +8,7 @@ import Homepage from "./homepage/page";
 import ChatPage from "./chat/page";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { LoaderPinwheelIcon } from "lucide-react";
 
 export default function Home() {
   const [user, loading] = useAuthState(auth);
@@ -21,7 +22,12 @@ export default function Home() {
   }, [user, loading, router]);
 
   if (loading) {
-    return <div>Loading...</div>; // Show a loading spinner while checking auth state
+    return (
+      <div>
+        {" "}
+        <LoaderPinwheelIcon className="animate-spin text-white" size={18} />
+      </div>
+    ); // Show a loading spinner while checking auth state
   }
 
   // If user is authenticated, show the chat page

@@ -1,5 +1,5 @@
 "use client";
-
+import { useAuth } from "../contexts/authcontext";
 import {
   createContext,
   useContext,
@@ -32,75 +32,96 @@ interface ChatContextType {
   sendMessage: (message: string) => Promise<void>;
   pastQueries: Message[];
   startNewChat: () => Promise<void>;
-  deleteQuery: (id: string) => Promise<void>; // ✅ Added delete function
-  loading: boolean; // ✅ AI response loading state
-  activeChat: string | null; // ✅ Define activeChat state
-  setActiveChat: (id: string | null) => void; // ✅ Define setter function
+  deleteQuery: (id: string) => Promise<void>;
+  loading: boolean;
+  activeChat: string | null;
+  setActiveChat: (id: string | null) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [pastQueries, setPastQueries] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false); // ✅ Tracks if AI is thinking
-  const [activeChat, setActiveChat] = useState<string | null>(null); // ✅ Track active chat
+  const [loading, setLoading] = useState(false);
+  const [activeChat, setActiveChat] = useState<string | null>(null);
 
   useEffect(() => {
-    // ✅ Fetch chat history from Firestore (sorted by timestamp)
-    const q = query(collection(db, "messages"), orderBy("timestamp", "desc"));
+    if (!user) {
+      setMessages([]);
+      setPastQueries([]);
+      return;
+    }
+
+    const q = query(
+      collection(db, "users", user.uid, "messages"),
+      orderBy("timestamp", "desc")
+    );
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetchedMessages = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as Message[];
+
       setPastQueries(fetchedMessages.filter((msg) => msg.role === "user"));
       setMessages(fetchedMessages.reverse());
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   const sendMessage = async (message: string) => {
-    const userMessage: Message = { role: "user", content: message };
-    setMessages((prev) => [...prev, userMessage]);
-    setLoading(true); // ✅ Start loading state
+    if (!user) return;
 
-    await addDoc(collection(db, "messages"), {
-      ...userMessage,
-      timestamp: new Date(),
-    });
+    setLoading(true); // ✅ Start Loading
 
     try {
-      const response = await sendMessageToAI(message);
-      const aiMessage: Message = { role: "assistant", content: response };
-      setMessages((prev) => [...prev, aiMessage]);
+      // ✅ Save User Message to Firestore (UI updates automatically via onSnapshot)
+      await addDoc(collection(db, "users", user.uid, "messages"), {
+        role: "user",
+        content: message,
+        timestamp: new Date(),
+      });
 
-      await addDoc(collection(db, "messages"), {
-        ...aiMessage,
+      // ✅ Get AI Response
+      const response = await sendMessageToAI(message);
+
+      // ✅ Save AI Response to Firestore (UI updates automatically via onSnapshot)
+      await addDoc(collection(db, "users", user.uid, "messages"), {
+        role: "assistant",
+        content: response,
         timestamp: new Date(),
       });
     } catch (error) {
       console.error("Error fetching AI response:", error);
     } finally {
-      setLoading(false); // ✅ Stop loading state
+      setLoading(false); // ✅ Stop Loading
     }
   };
 
   const startNewChat = async () => {
-    const querySnapshot = await getDocs(collection(db, "messages"));
+    if (!user) return;
+
+    const querySnapshot = await getDocs(
+      collection(db, "users", user.uid, "messages")
+    );
     querySnapshot.forEach(async (doc) => {
       await deleteDoc(doc.ref);
     });
 
     setMessages([]);
     setPastQueries([]);
+    setActiveChat(null);
   };
 
   const deleteQuery = async (id: string) => {
+    if (!user) return;
+
     try {
-      await deleteDoc(doc(db, "messages", id)); // ✅ Delete from Firestore
-      setPastQueries((prev) => prev.filter((query) => query.id !== id)); // ✅ Remove from UI
+      await deleteDoc(doc(db, "users", user.uid, "messages", id));
+      setPastQueries((prev) => prev.filter((query) => query.id !== id));
     } catch (error) {
       console.error("Error deleting message:", error);
     }
@@ -115,8 +136,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         startNewChat,
         deleteQuery,
         loading,
-        activeChat, // ✅ Provide activeChat state
-        setActiveChat, // ✅ Provide function to update activeChat
+        activeChat,
+        setActiveChat,
       }}
     >
       {children}

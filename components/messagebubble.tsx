@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Clipboard, Check, Loader2 } from "lucide-react"; // 🌀 Loader Icon
+import { Clipboard, Check, LoaderPinwheel } from "lucide-react"; // 🌀 Loader Icon
 
 // ✅ Message Type
 interface Props {
@@ -52,8 +52,8 @@ const MessageBubble: React.FC<Props> = ({ message, isThinking }) => {
       <div
         className={`chat-bubble p-3 leading-relaxed text-sm ${
           message.role === "user"
-            ? "bg-blue-900 text-white"
-            : "bg-gray-900 text-white"
+            ? "bg-blue-900 text-white text-size"
+            : "bg-gray-900 text-white text-size"
         }`}
       >
         {/* 🔹 Render Text & Code Blocks */}
@@ -88,15 +88,12 @@ const MessageBubble: React.FC<Props> = ({ message, isThinking }) => {
         )}
 
         {/* 🌀 "Guido is thinking..." Loader */}
-        {isThinking &&
-          (console.log("Rendering spinner..."), // Debug log
-          (
-            <div className="flex items-center gap-2 mt-2 text-gray-100">
-              <Loader2 className="animate-spin text-red-500" size={18} />{" "}
-              {/* Debug style */}
-              <span>Guido is thinking...</span>
-            </div>
-          ))}
+        {isThinking && message.content.trim() !== "" && (
+          <div className="flex items-center gap-2 mt-3 text-gray-100">
+            <LoaderPinwheel className="animate-spin text-white" size={18} />
+            <span>Guido is thinking...</span>
+          </div>
+        )}
       </div>
 
       {/* 📜 Auto-scroll target */}

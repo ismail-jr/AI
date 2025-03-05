@@ -28,31 +28,47 @@ const ChatInput = () => {
 
   return (
     <div className="relative w-full p-4">
-      {/* 🔹 System Role Cards (Visible before clicking input) */}
+      {/* 🔹 System Capability Cards (Visible before clicking input) */}
       {showCards && (
         <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
-            <h3 className="font-semibold">🎯 Career Guidance</h3>
+            <h3 className="font-semibold">🎓 Academic Support</h3>
             <p className="text-sm text-gray-300">
-              Get personalized career advice based on your interests.
+              Get help with study techniques, research guidance, and learning
+              strategies.
             </p>
           </div>
           <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
-            <h3 className="font-semibold">📊 Job Market Insights</h3>
+            <h3 className="font-semibold">🏆 Scholarships & Internships</h3>
             <p className="text-sm text-gray-300">
-              Discover industry trends and top-demand careers.
+              Find opportunities, improve applications, and craft compelling
+              essays.
             </p>
           </div>
           <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
-            <h3 className="font-semibold">📚 Training & Courses</h3>
+            <h3 className="font-semibold">🎯 Personal Development</h3>
             <p className="text-sm text-gray-300">
-              Find the best courses to upskill in your chosen field.
+              Enhance communication, leadership, and mental well-being skills.
             </p>
           </div>
           <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
-            <h3 className="font-semibold">📝 Resume & Interviews</h3>
+            <h3 className="font-semibold">💡 Entrepreneurship</h3>
             <p className="text-sm text-gray-300">
-              Get tips on resume building and interview preparation.
+              Get business ideas, startup advice, and financial management tips.
+            </p>
+          </div>
+          <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
+            <h3 className="font-semibold">🧑‍💼 Career Guidance</h3>
+            <p className="text-sm text-gray-300">
+              Build a strong resume, prepare for interviews, and explore job
+              trends.
+            </p>
+          </div>
+          <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md">
+            <h3 className="font-semibold">🛠 Technical & Coding Help</h3>
+            <p className="text-sm text-gray-300">
+              Debug code, get optimized solutions, and improve programming
+              skills.
             </p>
           </div>
         </div>
@@ -64,10 +80,18 @@ const ChatInput = () => {
           ref={textareaRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              // ✅ Send message on Enter (Shift+Enter for new line)
+              e.preventDefault(); // Prevent new line
+              handleSubmit(e as unknown as React.FormEvent); // Send message
+            }
+          }}
           onFocus={() => setShowCards(false)} // ✅ Hide cards when input is clicked
           placeholder="Ask Guido..."
           className="w-full max-h-52 min-h-[4rem] p-4 pr-12 bg-gray-900 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 transition resize-none"
         />
+
         {/* 🔹 Arrow Icon (Send Button) */}
         <button
           type="submit"

@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(currentUser);
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -66,15 +67,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // ✅ Save user data (including name) to Firestore
       await setDoc(doc(db, "users", user.uid), {
-        name, // ✅ Corrected: Use function argument instead of user.displayName
+        name,
         email: user.email,
         createdAt: new Date().toISOString(),
         uid: user.uid,
       });
 
-      setUser({ ...user, displayName: name }); // ✅ Ensure UI updates with name
-    } catch (error: unknown) {
-      console.error("Sign-Up Error:", (error as Error).message || error);
+      setUser(auth.currentUser); // ✅ Ensure UI updates with new profile info
+    } catch (error) {
+      console.error("Sign-Up Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -86,8 +87,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error: unknown) {
-      console.error("Sign-In Error:", (error as Error).message || error);
+    } catch (error) {
+      console.error("Sign-In Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -99,8 +100,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       await signOut(auth);
-    } catch (error: unknown) {
-      console.error("Logout Error:", (error as Error).message || error);
+    } catch (error) {
+      console.error("Logout Error:", error);
     } finally {
       setLoading(false);
     }

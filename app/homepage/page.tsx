@@ -3,7 +3,7 @@
 import { useAuth } from "@/contexts/authcontext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
+import { BrainCircuit, Eye, EyeOff } from "lucide-react";
 import Footer from "@/components/footer";
 
 const Homepage = () => {
@@ -81,9 +81,13 @@ const Homepage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full">
           {/* 🔹 Left Section - Banners */}
           <div>
-            <h1 className="text-4xl font-bold text-white">
-              Welcome to Career Guido
-            </h1>
+            <div className="flex flex-row items-center space-x-3">
+              <h1 className="text-4xl font-bold text-white">
+                Welcome to Guido
+              </h1>
+              <BrainCircuit className="w-10 h-10 text-white" />
+            </div>
+
             <p className="text-gray-200 mt-2 text-lg">
               Your AI-powered career mentor, guiding you towards the right path.
             </p>
@@ -124,7 +128,7 @@ const Homepage = () => {
               {isSignUp && (
                 <input
                   type="text"
-                  placeholder="Full Name"
+                  placeholder="Jibriel Ismail"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full p-3 border border-gray-300 text-gray-200 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -133,7 +137,7 @@ const Homepage = () => {
               )}
               <input
                 type="email"
-                placeholder="Email Address"
+                placeholder="example@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-3 border border-gray-300 text-gray-200 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

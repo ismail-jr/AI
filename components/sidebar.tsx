@@ -5,13 +5,12 @@ import { useAuth } from "../contexts/authcontext";
 import { useChat } from "../contexts/chatcontext"; // ✅ Import chat context
 import {
   User,
-  Cpu,
   LogOut,
-  Settings,
   PlusCircle,
   MessageSquare,
   MoreVertical,
   Trash2,
+  BrainCircuit,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -24,13 +23,13 @@ const Sidebar = () => {
     <aside className="w-72 sidebar h-screen flex flex-col shadow-2xl bg-gray-900 text-white">
       {/* 🔹 Sidebar Header */}
       <div className="p-4 flex items-center space-x-2 border-b border-gray-700">
-        <Cpu size={24} className="text-blue-500" />
+        <BrainCircuit size={24} className="text-blue-500" />
         <h2 className="text-lg font-semibold">Guido</h2>
       </div>
 
       {/* 🔹 User Profile Section */}
       <div className="p-4 flex items-center space-x-3 border-b border-gray-700">
-        <Link href="/profile" className="flex items-center space-x-3">
+        <Link href="#" className="flex items-center space-x-3">
           <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-gray-300">
             <User size={24} />
           </div>
@@ -113,13 +112,13 @@ const Sidebar = () => {
 
       {/* 🔹 Settings & Logout (Pinned at Bottom) */}
       <div className="p-4 border-t border-gray-700">
-        <Link
+        {/* <Link
           href="/settings"
           className="flex items-center space-x-2 p-3 hover:bg-gray-800 rounded-md transition"
         >
           <Settings size={18} />
           <span>Settings</span>
-        </Link>
+        </Link> */}
         <button
           onClick={logout}
           className="w-full flex items-center justify-center space-x-2 bg-gray-600 py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 mt-2"
