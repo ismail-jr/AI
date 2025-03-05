@@ -24,7 +24,7 @@ interface Message {
   id?: string;
   role: "user" | "assistant";
   content: string;
-  timestamp?: any;
+  timestamp?: number | Date;
 }
 
 interface ChatContextType {

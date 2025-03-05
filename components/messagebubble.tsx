@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Clipboard, Check, LoaderPinwheel } from "lucide-react"; // 🌀 Loader Icon
+import { Clipboard, Check, LoaderPinwheel } from "lucide-react";
 
 // ✅ Message Type
 interface Props {
@@ -19,7 +19,7 @@ const formatText = (text: string) => {
     .replace(/__(.*?)__/g, "<u>$1</u>") // Underline (__underline__)
     .replace(/`([^`]+)`/g, "<code>$1</code>") // Inline code (`code`)
     .replace(/\n/g, "<br />") // Preserve line breaks
-    .replace(/[-•*]\s+(.*?)(<br \/>|$)/g, "<strong>•</strong> $1<br />") // ✅ Make bullet points bold
+    .replace(/[-•*]\s+(.*?)(<br \/>|$)/g, "<strong>•</strong> $1<br />") // ✅ Bullet points
     .replace(
       /\[(.*?)\]\((.*?)\)/g,
       '<a href="$2" target="_blank" class="text-blue-400">$1</a>'
@@ -27,7 +27,7 @@ const formatText = (text: string) => {
 };
 
 const MessageBubble: React.FC<Props> = ({ message, isThinking }) => {
-  const [copied, setCopied] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
 
   // ✅ Auto-scroll to Bottom
@@ -36,13 +36,12 @@ const MessageBubble: React.FC<Props> = ({ message, isThinking }) => {
   }, [message]);
 
   // ✅ Detect & Extract Code Blocks
-  const isCode = message.content.includes("```");
   const textParts = message.content.split(/```([\s\S]*?)```/g);
 
-  const copyToClipboard = (code: string) => {
+  const copyToClipboard = (code: string, index: number) => {
     navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
   };
 
   return (
@@ -78,10 +77,14 @@ const MessageBubble: React.FC<Props> = ({ message, isThinking }) => {
                 {part.trim()}
               </SyntaxHighlighter>
               <button
-                onClick={() => copyToClipboard(part.trim())}
+                onClick={() => copyToClipboard(part.trim(), index)}
                 className="absolute top-2 right-2 bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-md transition"
               >
-                {copied ? <Check size={18} /> : <Clipboard size={18} />}
+                {copiedIndex === index ? (
+                  <Check size={18} />
+                ) : (
+                  <Clipboard size={18} />
+                )}
               </button>
             </div>
           )

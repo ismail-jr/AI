@@ -31,11 +31,12 @@ const Homepage = () => {
       } else {
         await signInWithEmail(email, password);
       }
-    } catch (error: any) {
+    } catch (err: unknown) {
       let errorMessage = "An unexpected error occurred. Please try again.";
 
-      if (error.code) {
-        switch (error.code) {
+      if (err instanceof Error && "code" in err) {
+        const errorCode = (err as { code: string }).code;
+        switch (errorCode) {
           case "auth/email-already-in-use":
             errorMessage =
               "This email is already registered. Try signing in instead.";
@@ -131,7 +132,7 @@ const Homepage = () => {
                   placeholder="Jibriel Ismail"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-3 border border-gray-300 text-gray-200 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-300 text-gray-100 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               )}
@@ -140,7 +141,7 @@ const Homepage = () => {
                 placeholder="example@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 text-gray-200 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 text-gray-100 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
               <div className="relative">
@@ -149,7 +150,7 @@ const Homepage = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-3 border border-gray-300 text-gray-200 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-300 text-gray-100 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 <button
