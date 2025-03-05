@@ -11,8 +11,8 @@ import {
   MoreVertical,
   Trash2,
   BrainCircuit,
-  ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -30,7 +30,7 @@ const Sidebar = () => {
         className="md:hidden p-3 fixed top-2 z-50  rounded-md text-white"
       >
         {sidebarOpen ? (
-          <ChevronLeft size={20} className="bg-slate-900" />
+          <X size={20} className="bg-slate-900" />
         ) : (
           <ChevronRight size={20} />
         )}
