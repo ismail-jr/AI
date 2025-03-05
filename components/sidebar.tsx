@@ -63,7 +63,7 @@ const Sidebar = () => {
                 >
                   {/* 🔹 Click to load chat */}
                   <div
-                    onClick={() => setActiveChat(query)}
+                    onClick={() => setActiveChat(query.id ?? null)}
                     className="flex items-center space-x-2 flex-1"
                   >
                     <MessageSquare size={16} className="text-blue-400" />
@@ -112,13 +112,6 @@ const Sidebar = () => {
 
       {/* 🔹 Settings & Logout (Pinned at Bottom) */}
       <div className="p-4 border-t border-gray-700">
-        {/* <Link
-          href="/settings"
-          className="flex items-center space-x-2 p-3 hover:bg-gray-800 rounded-md transition"
-        >
-          <Settings size={18} />
-          <span>Settings</span>
-        </Link> */}
         <button
           onClick={logout}
           className="w-full flex items-center justify-center space-x-2 bg-gray-600 py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 mt-2"
