@@ -38,7 +38,7 @@ const Sidebar = () => {
 
       {/* 🔹 Sidebar */}
       <aside
-        className={`w-72 h-screen flex flex-col shadow-2xl sidebar fixed top-0 left-0 z-40 transition-transform transform ${
+        className={`w-72 h-screen flex flex-col py-14 shadow-2xl sidebar fixed top-0 left-0 z-40 transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:relative md:translate-x-0`}
       >
@@ -129,7 +129,7 @@ const Sidebar = () => {
         </div>
 
         {/* 🔹 Settings & Logout */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-6 border-t border-gray-700">
           <button
             onClick={logout}
             className="w-full flex items-center justify-center space-x-2 bg-gray-600 py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 mt-2"
