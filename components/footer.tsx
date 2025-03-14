@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-6 px-4">
+    <footer className="bg-gray-900 text-white py-10 px-4">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 text-center md:text-left">
         {/* Column 1: Branding */}
         <div>
@@ -30,7 +30,7 @@ const Footer = () => {
       </div>
 
       {/* Copyright Notice */}
-      <div className="text-center text-gray-500 mt-6">
+      <div className="text-center text-gray-500 mt-6 pb-2">
         © 2025 Career Guido AI. All rights reserved.
       </div>
     </footer>
