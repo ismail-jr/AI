@@ -37,8 +37,9 @@ const Sidebar = () => {
       </button>
 
       {/* 🔹 Sidebar */}
+      {/* 🔹 Sidebar */}
       <aside
-        className={`w-72 h-screen flex flex-col py-14 shadow-2xl sidebar fixed top-0 left-0 z-40 transition-transform transform ${
+        className={`w-72 h-full flex py-12 flex-col shadow-2xl sidebar fixed top-0 left-0 z-40 transition-transform transform overflow-y-auto hide-scrollbar ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:relative md:translate-x-0`}
       >
