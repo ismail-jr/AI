@@ -1,5 +1,3 @@
-Here's an updated version of your README file:
-
 # CareerGuide AI Bot
 
 This project is an AI-powered career guidance platform built using Next.js, Firebase, and the OpenAI API via Open Router. It helps students find the right career path, prepare for interviews, and solve coding problems, including debugging.
