@@ -56,7 +56,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
     const q = query(
       collection(db, "users", user.uid, "messages"),
-      orderBy("timestamp", "desc")
+      orderBy("timestamp", "desc"),
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -75,20 +75,18 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const sendMessage = async (message: string) => {
     if (!user) return;
 
-    setLoading(true); // ✅ Start Loading
+    setLoading(true);
 
     try {
-      // ✅ Save User Message to Firestore (UI updates automatically via onSnapshot)
       await addDoc(collection(db, "users", user.uid, "messages"), {
         role: "user",
         content: message,
         timestamp: new Date(),
       });
 
-      // ✅ Get AI Response
+      // Get AI Response
       const response = await sendMessageToAI(message);
 
-      // ✅ Save AI Response to Firestore (UI updates automatically via onSnapshot)
       await addDoc(collection(db, "users", user.uid, "messages"), {
         role: "assistant",
         content: response,
@@ -97,7 +95,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error("Error fetching AI response:", error);
     } finally {
-      setLoading(false); // ✅ Stop Loading
+      setLoading(false);
     }
   };
 
@@ -105,7 +103,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     if (!user) return;
 
     const querySnapshot = await getDocs(
-      collection(db, "users", user.uid, "messages")
+      collection(db, "users", user.uid, "messages"),
     );
     querySnapshot.forEach(async (doc) => {
       await deleteDoc(doc.ref);

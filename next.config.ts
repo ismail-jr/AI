@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true, // Helps catch potential issues
-  output: "standalone", // Optimized for deployment
+  reactStrictMode: true,
+  output: "standalone",
   async headers() {
     return [
       {
@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     ];
   },
   webpack: (config) => {
-    config.resolve.fallback = { fs: false }; // Fix Firebase issues
+    config.resolve.fallback = { fs: false };
     return config;
   },
 };
